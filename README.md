@@ -1,2 +1,4 @@
 # jimgreekgamerYT GitHub page
-This is just for testing at least for now 
+Current Link: https://jimgreekgameryt.github.io/page/
+
+The reason for the creation of this page is for learning experience and practice with HTML code and generaly web pages.
