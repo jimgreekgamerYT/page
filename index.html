@@ -3,7 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT</title>
+    <title>jimgreekgamerYT - Satellite Photos</title>
+    <style>
+        .photo-container {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .timestamp {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
     <h2>Temporary Page (under construction)</h2>
@@ -11,5 +28,54 @@
         <ul>Link: <a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a></ul>
     </div>
     <div class="AWDAS">This page will probably be used to upload NOAA and METEOR images that are received by my SDR V4 and Raspberry Pi 5</div>
+
+    <h3>Latest Satellite Images</h3>
+    <div id="photo-gallery">
+        <!-- Images will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        // Array of image filenames with timestamps (YYYYMMDD_HHMMSS format)
+        const imageData = [
+            {filename: "NOAA_20231025_143045.jpg"},
+            {filename: "METEOR_20231025_152300.jpg"},
+            // Add more images as needed
+        ];
+
+        function formatTimestamp(filename) {
+            // Extract timestamp from filename (assuming format: NAME_YYYYMMDD_HHMMSS.jpg)
+            const parts = filename.split('_');
+            const dateStr = parts[1];
+            const timeStr = parts[2].split('.')[0];
+            
+            // Format date and time
+            return `${dateStr.slice(6,8)}/${dateStr.slice(4,6)}/${dateStr.slice(0,4)} ` +
+                   `${timeStr.slice(0,2)}:${timeStr.slice(2,4)}:${timeStr.slice(4,6)} UTC`;
+        }
+
+        function loadImages() {
+            const gallery = document.getElementById('photo-gallery');
+            
+            imageData.forEach(img => {
+                const container = document.createElement('div');
+                container.className = 'photo-container';
+                
+                const timestamp = document.createElement('p');
+                timestamp.className = 'timestamp';
+                timestamp.textContent = `Acquisition Time: ${formatTimestamp(img.filename)}`;
+                
+                const image = document.createElement('img');
+                image.src = `NM_photos/${img.filename}`;
+                image.alt = `Satellite Image ${img.filename}`;
+                
+                container.appendChild(timestamp);
+                container.appendChild(image);
+                gallery.appendChild(container);
+            });
+        }
+
+        // Load images when page loads
+        window.onload = loadImages;
+    </script>
 </body>
 </html>
