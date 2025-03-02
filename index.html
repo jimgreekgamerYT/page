@@ -3,79 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT - Satellite Photos</title>
+    <title>Satellite Images Gallery</title>
     <style>
-        .photo-container {
+        .image-card {
             margin: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
         }
-        .timestamp {
-            font-weight: bold;
-            color: #333;
+        .meta-data {
             margin-bottom: 10px;
+            color: #333;
         }
         img {
             max-width: 100%;
             height: auto;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
+        }
+        .satellite-title {
+            color: #2c3e50;
+            font-size: 1.2em;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-    <h2>Temporary Page (under construction)</h2>
-    <div>Current running page (for more stuff)
-        <ul>Link: <a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a></ul>
-    </div>
-    <div class="AWDAS">This page will probably be used to upload NOAA and METEOR images that are received by my SDR V4 and Raspberry Pi 5</div>
-
-    <h3>Latest Satellite Images</h3>
-    <div id="photo-gallery">
-        <!-- Images will be inserted here by JavaScript -->
-    </div>
+    <h2>Satellite Images Gallery</h2>
+    <div id="image-container"></div>
 
     <script>
-        // Array of image filenames with timestamps (YYYYMMDD_HHMMSS format)
-        const imageData = [
-            {filename: "NOAA_20231025_143045.jpg"},
-            {filename: "METEOR_20231025_152300.jpg"},
-            // Add more images as needed
+        // Sample image files (in real use, these would be auto-populated by server-side script)
+        const imageFiles = [
+            "2024-12-20_17-12_noaa_apt_137.62 MHz.jpg",
+            "2024-12-20_18-00_meteor_m2-x_lrpt_137.9 MHz.png",
+            "2024-12-21_09-45_noaa_apt_137.62 MHz.jpg"
         ];
 
-        function formatTimestamp(filename) {
-            // Extract timestamp from filename (assuming format: NAME_YYYYMMDD_HHMMSS.jpg)
-            const parts = filename.split('_');
-            const dateStr = parts[1];
-            const timeStr = parts[2].split('.')[0];
+        function parseFilename(filename) {
+            const pattern = /(\d{4}-\d{2}-\d{2})_(\d{2})-(\d{2})_([a-z]+)_([a-z0-9-]+)_lrpt_(\d+\.\d+ MHz|\d+ MHz)/i;
+            const match = filename.match(pattern);
             
-            // Format date and time
-            return `${dateStr.slice(6,8)}/${dateStr.slice(4,6)}/${dateStr.slice(0,4)} ` +
-                   `${timeStr.slice(0,2)}:${timeStr.slice(2,4)}:${timeStr.slice(4,6)} UTC`;
+            if (!match) return null;
+
+            return {
+                date: match[1],
+                time: `${match[2]}:${match[3]} UTC`,
+                satellite: match[4].toUpperCase(),
+                type: match[5].replace(/-/g, ' ').toUpperCase(),
+                frequency: match[6],
+                filename: `NM_photos/${filename}`
+            };
         }
 
-        function loadImages() {
-            const gallery = document.getElementById('photo-gallery');
+        function createImageCard(data) {
+            const card = document.createElement('div');
+            card.className = 'image-card';
+
+            const meta = document.createElement('div');
+            meta.className = 'meta-data';
             
-            imageData.forEach(img => {
-                const container = document.createElement('div');
-                container.className = 'photo-container';
-                
-                const timestamp = document.createElement('p');
-                timestamp.className = 'timestamp';
-                timestamp.textContent = `Acquisition Time: ${formatTimestamp(img.filename)}`;
-                
-                const image = document.createElement('img');
-                image.src = `NM_photos/${img.filename}`;
-                image.alt = `Satellite Image ${img.filename}`;
-                
-                container.appendChild(timestamp);
-                container.appendChild(image);
-                gallery.appendChild(container);
+            const title = document.createElement('div');
+            title.className = 'satellite-title';
+            title.textContent = `${data.satellite} ${data.type}`;
+
+            const details = document.createElement('p');
+            details.innerHTML = `
+                <strong>Date:</strong> ${data.date}<br>
+                <strong>Time:</strong> ${data.time}<br>
+                <strong>Frequency:</strong> ${data.frequency}
+            `;
+
+            const img = document.createElement('img');
+            img.src = data.filename;
+            img.alt = `${data.satellite} capture at ${data.time}`;
+
+            meta.appendChild(title);
+            meta.appendChild(details);
+            card.appendChild(meta);
+            card.appendChild(img);
+            
+            return card;
+        }
+
+        function loadGallery() {
+            const container = document.getElementById('image-container');
+            
+            // Process and sort images
+            const images = imageFiles
+                .map(file => parseFilename(file))
+                .filter(Boolean)
+                .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+            // Create and append cards
+            images.forEach(data => {
+                container.appendChild(createImageCard(data));
             });
         }
 
-        // Load images when page loads
-        window.onload = loadImages;
+        window.addEventListener('load', loadGallery);
     </script>
 </body>
 </html>
