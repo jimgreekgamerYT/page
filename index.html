@@ -3,8 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT - Satellite Images</title>
+    <title>jimgreekgamerYT - Main Page</title>
     <style>
+        /* Tab Styles */
+        .tabs {
+            margin: 20px 0;
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            cursor: pointer;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: background 0.3s;
+        }
+        
+        .tab-button.active {
+            background: white;
+            font-weight: bold;
+            border-color: #2c3e50;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Existing Image Styles */
         .image-card {
             margin: 20px;
             padding: 15px;
@@ -33,17 +69,50 @@
     </style>
 </head>
 <body>
-    <h2>Temporary Page (under construction)</h2>
-    <div>Current running page (for more stuff)
-        <ul>Link: <a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a></ul>
-        Below you can see the satellite images received from my station from NOAA and METEOR satellites using APT downlink.
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <button class="tab-button active" onclick="switchTab('blog')">Blog</button>
+        <button class="tab-button" onclick="switchTab('satellite')">Satellite Images</button>
     </div>
 
-    <h2>Satellite Images Gallery</h2>
-    <div id="image-container"></div>
+    <!-- Blog Content -->
+    <div id="blog-content" class="tab-content active">
+        <h2>Welcome to My Space Observation Blog</h2>
+        <div>
+            <p>This is my temporary page while I work on building out the full website. Check back later for updates!</p>
+            <p>Current running page (for more content):
+                <br><a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a>
+            </p>
+            <h3>Latest Update</h3>
+            <p>Here you'll find updates about my satellite imaging projects, astronomy observations, and space-related experiments. Stay tuned for more content coming soon!</p>
+        </div>
+    </div>
+
+    <!-- Satellite Images Content -->
+    <div id="satellite-content" class="tab-content">
+        <h2>Satellite Images Gallery</h2>
+        <div id="image-container"></div>
+    </div>
 
     <script>
-        // Image files with metadata
+        // Tab Switching Function
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content and activate button
+            document.getElementById(`${tabName}-content`).classList.add('active');
+            document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
+        }
+
+        // Image Gallery Code (same as original)
         const imageFiles = [
             {
                 filename: "2024-12-20_18-00_meteor_m2-x_lrpt_137.9 MHz/msu_mr_Channel_4_Equalized_corrected.png",
@@ -103,14 +172,12 @@
         function loadGallery() {
             const container = document.getElementById('image-container');
             
-            // Sort images by datetime
             const images = imageFiles.sort((a, b) => {
                 const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
                 const dateB = new Date(`${b.date}T${b.time.replace(' UTC', '')}`);
-                return dateB - dateA; // Newest first
+                return dateB - dateA;
             });
 
-            // Create and append cards
             images.forEach(data => {
                 container.appendChild(createImageCard(data));
             });
