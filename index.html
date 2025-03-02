@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT - Main Page</title>
+    <title>jimgreekgamerYT - Page</title>
     <style>
         /* Tab Styles */
         .tabs {
@@ -71,20 +71,22 @@
 <body>
     <!-- Tab Navigation -->
     <div class="tabs">
-        <button class="tab-button active" onclick="switchTab('blog')">Blog</button>
+        <button class="tab-button active" onclick="switchTab('blog')">Main</button>
         <button class="tab-button" onclick="switchTab('satellite')">Satellite Images</button>
     </div>
 
     <!-- Blog Content -->
     <div id="blog-content" class="tab-content active">
-        <h2>Welcome to My Space Observation Blog</h2>
+        <h2>Welcome to my page (under construction still...)</h2>
         <div>
-            <p>This is my temporary page while I work on building out the full website. Check back later for updates!</p>
+            <p>This site is temporary for now and bound to become the main site. Below you can see the currently main site for
+                now which contains more stuff.
+            </p>
             <p>Current running page (for more content):
                 <br><a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a>
             </p>
-            <h3>Latest Update</h3>
-            <p>Here you'll find updates about my satellite imaging projects, astronomy observations, and space-related experiments. Stay tuned for more content coming soon!</p>
+            <h3>Latest Update (currently updating)</h3>
+            <p>The next tab contains the images coming from my Raspberry Pi 5 using a RTL-SDR v4 to get images from NOAA and METEOR satellites.</p>
         </div>
     </div>
 
@@ -121,7 +123,7 @@
                 frequency: "137.9 MHz",
                 date: "2024-12-20",
                 time: "18:00 UTC",
-                note: "Channel 4 Equalized (MSU-MR)"
+                //note: "Channel 4 Equalized (MSU-MR)"
             },
             {
                 filename: "2024-12-20_17-12_noaa_apt_137.62 MHz/raw_sync.png",
@@ -130,7 +132,7 @@
                 frequency: "137.62 MHz",
                 date: "2024-12-20",
                 time: "17:12 UTC",
-                note: "Raw Synchronized Image"
+                //note: "Raw Synchronized Image"
             }
         ];
 
@@ -152,9 +154,10 @@
                 <strong>Frequency:</strong> ${data.frequency}
             `;
 
-            const note = document.createElement('p');
-            note.className = 'image-note';
-            note.textContent = data.note;
+            // Note has been removed for now (atleast)
+            //const note = document.createElement('p');
+            //note.className = 'image-note';
+            //note.textContent = data.note;
 
             const img = document.createElement('img');
             img.src = `NM_photos/${data.filename}`;
@@ -162,7 +165,7 @@
 
             meta.appendChild(title);
             meta.appendChild(details);
-            meta.appendChild(note);
+            //meta.appendChild(note);
             card.appendChild(meta);
             card.appendChild(img);
             
