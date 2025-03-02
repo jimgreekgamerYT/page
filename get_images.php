@@ -2,37 +2,43 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-$imageDir = 'NM_photos/';
-$images = [];
-
-foreach (glob($imageDir . '*.*') as $file) {
-    $filename = basename($file);
-    $metadata = [
-        'filename' => $filename,
-        'satellite' => 'Unknown',
-        'type' => 'APT',
-        'frequency' => '137.50 MHz',
-        'date' => date('Y-m-d', filemtime($file)),
-        'time' => date('H:i', filemtime($file)) . ' UTC',
-        'note' => 'Automatically processed'
-    ];
-
-    // Extract from filename if possible
-    if (preg_match('/(noaa|meteor).*apt/i', $filename, $matches)) {
-        $metadata['satellite'] = strtoupper($matches[1]);
-        $metadata['type'] = 'APT';
-    } elseif (preg_match('/(meteor).*lrpt/i', $filename)) {
-        $metadata['satellite'] = 'METEOR-M2';
-        $metadata['type'] = 'LRPT';
+try {
+    $imageDir = 'NM_photos/';
+    
+    if (!is_dir($imageDir)) {
+        throw new Exception("Folder $imageDir does not exist");
     }
 
-    $images[] = $metadata;
+    $images = [];
+    $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+    foreach (scandir($imageDir) as $file) {
+        if ($file === '.' || $file === '..') continue;
+        
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if (!in_array($ext, $validExtensions)) continue;
+
+        $images[] = [
+            'filename' => $file,
+            'date' => date('Y-m-d', filemtime($imageDir.$file)),
+            'time' => date('H:i:s', filemtime($imageDir.$file)).' UTC'
+        ];
+    }
+
+    if (empty($images)) {
+        throw new Exception("No images found in $imageDir");
+    }
+
+    echo json_encode([
+        'status' => 'success',
+        'data' => $images
+    ]);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => $e->getMessage()
+    ]);
 }
-
-// Sort by capture time (newest first)
-usort($images, function($a, $b) {
-    return strtotime($b['date'] . ' ' . $b['time']) - strtotime($a['date'] . ' ' . $a['time']);
-});
-
-echo json_encode($images);
 ?>
