@@ -1,74 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automatic Satellite Gallery</title>
-    <style>
-        /* Keep your existing styles */
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-            color: #666;
-        }
-        .error {
-            color: #dc3545;
-            padding: 20px;
-            border: 1px solid #dc3545;
-            margin: 20px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Keep your existing header content -->
+async function loadGallery() {
+    const container = document.getElementById('image-container');
+    container.innerHTML = '<div class="loading">Loading images...</div>';
 
-    <div id="image-container">
-        <div class="loading">Loading satellite images...</div>
-    </div>
+    try {
+        const response = await fetch('get_images.php');
+        const result = await response.json();
 
-    <script>
-        async function loadGallery() {
-            const container = document.getElementById('image-container');
-            
-            try {
-                const response = await fetch('get_images.php');
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const images = await response.json();
-                container.innerHTML = ''; // Clear loading message
-
-                images.forEach(data => {
-                    const card = document.createElement('div');
-                    card.className = 'image-card';
-
-                    card.innerHTML = `
-                        <div class="meta-data">
-                            <div class="satellite-title">${data.satellite} ${data.type}</div>
-                            <p>
-                                <strong>Date:</strong> ${data.date}<br>
-                                <strong>Time:</strong> ${data.time}<br>
-                                <strong>Frequency:</strong> ${data.frequency}
-                            </p>
-                            ${data.note ? `<p class="image-note">${data.note}</p>` : ''}
-                        </div>
-                        <img src="NM_photos/${data.filename}" alt="${data.satellite} image">
-                    `;
-
-                    container.appendChild(card);
-                });
-
-            } catch (error) {
-                container.innerHTML = `
-                    <div class="error">
-                        Error loading images: ${error.message}<br>
-                        Check your connection and try refreshing the page.
-                    </div>
-                `;
-            }
+        if (result.status !== 'success') {
+            throw new Error(result.message || 'Server error');
         }
 
-        window.addEventListener('load', loadGallery);
-    </script>
-</body>
-</html>
+        container.innerHTML = '';
+        result.data.forEach(file => {
+            const card = document.createElement('div');
+            card.className = 'image-card';
+            card.innerHTML = `
+                <div class="meta-data">
+                    <div class="satellite-title">${file.filename}</div>
+                    <p>
+                        <strong>Date:</strong> ${file.date}<br>
+                        <strong>Time:</strong> ${file.time}
+                    </p>
+                </div>
+                <img src="NM_photos/${file.filename}" alt="Satellite image">
+            `;
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        container.innerHTML = `
+            <div class="error">
+                Error: ${error.message}<br>
+                Ensure:<br>
+                1. PHP is enabled on your server<br>
+                2. NM_photos folder exists<br>
+                3. File permissions are correct
+            </div>
+        `;
+    }
+}
