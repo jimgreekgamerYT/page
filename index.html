@@ -120,7 +120,6 @@
         const imageFiles = [
             {
                 filename: "2024-12-20_18-00_meteor_m2-x_lrpt_137.9 MHz/msu_mr_Channel_4_Equalized_corrected.png",
-                filename: "2024-12-20_17-12_noaa_apt_137.62 MHz/avhrr_3_rgb_MCIR_Rain_(Uncalibrated).png",
                 satellite: "METEOR-M2",
                 type: "APT",
                 frequency: "137.91 MHz",
@@ -165,6 +164,10 @@
             const img = document.createElement('img');
             img.src = `NM_photos/${data.filename}`;
             img.alt = `${data.satellite} capture at ${data.time}`;
+
+            const img1 = document.createElement('img');
+            img1.src = `NM_photos/${data.filename}`;
+            img1.alt = `${data.satellite} capture at ${data.time}`;
 
             meta.appendChild(title);
             meta.appendChild(details);
