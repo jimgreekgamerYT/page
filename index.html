@@ -53,7 +53,7 @@
             color: #333;
         }
         img {
-            max-width: 100%;
+            max-width: 20%;
             height: auto;
             border: 1px solid #ccc;
         }
@@ -62,6 +62,12 @@
             font-size: 1.2em;
             margin-bottom: 5px;
         }
+        /*
+        .image-note {
+            color: #666;
+            font-style: italic;
+        }
+        */
     </style>
 </head>
 <body>
@@ -96,7 +102,7 @@
         <div id="image-container"></div>
     </div>
 
-    <script>
+    <script> 
         // Tab Switching Function
         function switchTab(tabName) {
             // Hide all tab contents
@@ -111,17 +117,30 @@
             
             // Show selected tab content and activate button
             document.getElementById(`${tabName}-content`).classList.add('active');
-            document.querySelector(`.tab-button[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
         }
 
-        // Fetch Image Files from directory
-        async function fetchImageFiles() {
-            const response = await fetch('https://api.github.com/repos/jimgreekgamerYT/page/contents/NM_photos'); // GitHub API to list directory contents
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        // Image Gallery Code (same as original)
+        const imageFiles = [
+            {
+                filename: "2025-03-06_12-55_meteor_m2-x_lrpt_137.9 MHz/msu_mr_rgb_AVHRR_221_False_Color_corrected.png",
+                satellite: "METEOR-M2",
+                type: "LRPT",
+                frequency: "137.91 MHz",
+                date: "2025-3-6",
+                time: "12:55 UTC",
+                //note: "Channel 4 Equalized (MSU-MR)"
+            },
+            {
+                filename: "2024-12-20_17-12_noaa_apt_137.62 MHz/raw_sync.png",
+                satellite: "NOAA-15",
+                type: "APT",
+                frequency: "137.62 MHz",
+                date: "2024-12-20",
+                time: "17:12 UTC",
+                //note: "Raw Synchronized Image"
             }
-            return await response.json();
-        }
+        ];
 
         function createImageCard(data) {
             const card = document.createElement('div');
@@ -132,35 +151,49 @@
             
             const title = document.createElement('div');
             title.className = 'satellite-title';
-            title.textContent = data.name; // Use filename as title
+            title.textContent = `${data.satellite} ${data.type}`;
+
+            const details = document.createElement('p');
+            details.innerHTML = `
+                <strong>Date:</strong> ${data.date}<br>
+                <strong>Time:</strong> ${data.time}<br>
+                <strong>Frequency:</strong> ${data.frequency}
+            `;
+
+            // Note has been removed for now (atleast)
+            //const note = document.createElement('p');
+            //note.className = 'image-note';
+            //note.textContent = data.note;
 
             const img = document.createElement('img');
-            img.src = data.download_url;
-            img.alt = data.name;
+            img.src = `NM_photos/${data.filename}`;
+            img.alt = `${data.satellite} capture at ${data.time}`;
+
+            const img1 = document.createElement('img');
+            img1.src = `NM_photos/${data.filename}`;
+            img1.alt = `${data.satellite} capture at ${data.time}`;
 
             meta.appendChild(title);
+            meta.appendChild(details);
+            //meta.appendChild(note);
             card.appendChild(meta);
             card.appendChild(img);
             
             return card;
         }
 
-        async function loadGallery() {
-            try {
-                const imageFiles = await fetchImageFiles();
-                const container = document.getElementById('image-container');
+        function loadGallery() {
+            const container = document.getElementById('image-container');
+            
+            const images = imageFiles.sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
+                const dateB = new Date(`${b.date}T${b.time.replace(' UTC', '')}`);
+                return dateB - dateA;
+            });
 
-                // Clear old images
-                container.innerHTML = '';
-                
-                imageFiles.forEach(data => {
-                    if (data.type === "file" && data.name.endsWith(".png")) { // Adjust condition for images
-                        container.appendChild(createImageCard(data));
-                    }
-                });
-            } catch (error) {
-                console.error('Failed to load images:', error);
-            }
+            images.forEach(data => {
+                container.appendChild(createImageCard(data));
+            });
         }
 
         window.addEventListener('load', loadGallery);
