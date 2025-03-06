@@ -40,7 +40,7 @@
             display: block;
         }
 
-        /* Image Card Styles */
+        /* Existing Image Styles */
         .image-card {
             margin: 20px;
             padding: 15px;
@@ -62,6 +62,12 @@
             font-size: 1.2em;
             margin-bottom: 5px;
         }
+        /*
+        .image-note {
+            color: #666;
+            font-style: italic;
+        }
+        */
     </style>
 </head>
 <body>
@@ -96,7 +102,7 @@
         <div id="image-container"></div>
     </div>
 
-    <script>
+    <script> 
         // Tab Switching Function
         function switchTab(tabName) {
             // Hide all tab contents
@@ -114,60 +120,27 @@
             document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
         }
 
-        // Image Gallery Code
-        async function loadGallery() {
-            const container = document.getElementById('image-container');
-            container.innerHTML = ''; // Clear existing content
-
-            // Define the folders to scan
-            const folders = ['russia', 'usa'];
-
-            for (const folder of folders) {
-                try {
-                    const response = await fetch(`NM_photos/${folder}/`);
-                    if (!response.ok) continue;
-                    
-                    const html = await response.text();
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const links = Array.from(doc.querySelectorAll('a[href]'));
-
-                    const imageFiles = links
-                        .map(link => link.href)
-                        .filter(href => /\.(png|jpg|jpeg)$/i.test(href))
-                        .map(href => {
-                            const filename = href.split('/').pop();
-                            return { filename: `${folder}/${filename}`, folder };
-                        });
-
-                    for (const file of imageFiles) {
-                        const meta = parseFilename(file.filename);
-                        if (meta) {
-                            container.appendChild(createImageCard(meta));
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error loading folder:', folder, error);
-                }
+        // Image Gallery Code (same as original)
+        const imageFiles = [
+            {
+                filename: "2025-03-06_12-55_meteor_m2-x_lrpt_137.9 MHz/msu_mr_rgb_AVHRR_221_False_Color_corrected.png",
+                satellite: "METEOR-M2",
+                type: "LRPT",
+                frequency: "137.91 MHz",
+                date: "2025-3-6",
+                time: "12:55 UTC",
+                //note: "Channel 4 Equalized (MSU-MR)"
+            },
+            {
+                filename: "2024-12-20_17-12_noaa_apt_137.62 MHz/raw_sync.png",
+                satellite: "NOAA-15",
+                type: "APT",
+                frequency: "137.62 MHz",
+                date: "2024-12-20",
+                time: "17:12 UTC",
+                //note: "Raw Synchronized Image"
             }
-        }
-
-        function parseFilename(filename) {
-            // Example filename: METEOR-M2_2024-03-06_12-55-00_137.91MHz_LRPT.png
-            const pattern = /^([^_]+)_(\d{4}-\d{2}-\d{2})_(\d{2})-(\d{2})-(\d{2})_(\d+\.\d+)MHz_([A-Z]+)\.[a-z]+$/i;
-            const match = filename.match(pattern);
-            
-            if (!match) return null;
-
-            return {
-                filename: filename,
-                satellite: match[1],
-                date: match[2].replace(/-/g, '/'), // Format date as YYYY/MM/DD
-                time: `${match[3]}:${match[4]} UTC`, // Format time as HH:MM UTC
-                frequency: `${match[6]} MHz`,
-                type: match[7]
-            };
-        }
+        ];
 
         function createImageCard(data) {
             const card = document.createElement('div');
@@ -187,16 +160,40 @@
                 <strong>Frequency:</strong> ${data.frequency}
             `;
 
+            // Note has been removed for now (atleast)
+            //const note = document.createElement('p');
+            //note.className = 'image-note';
+            //note.textContent = data.note;
+
             const img = document.createElement('img');
             img.src = `NM_photos/${data.filename}`;
-            img.alt = `${data.satellite} capture on ${data.date} at ${data.time}`;
+            img.alt = `${data.satellite} capture at ${data.time}`;
+
+            const img1 = document.createElement('img');
+            img1.src = `NM_photos/${data.filename}`;
+            img1.alt = `${data.satellite} capture at ${data.time}`;
 
             meta.appendChild(title);
             meta.appendChild(details);
+            //meta.appendChild(note);
             card.appendChild(meta);
             card.appendChild(img);
             
             return card;
+        }
+
+        function loadGallery() {
+            const container = document.getElementById('image-container');
+            
+            const images = imageFiles.sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
+                const dateB = new Date(`${b.date}T${b.time.replace(' UTC', '')}`);
+                return dateB - dateA;
+            });
+
+            images.forEach(data => {
+                container.appendChild(createImageCard(data));
+            });
         }
 
         window.addEventListener('load', loadGallery);
