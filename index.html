@@ -1,188 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT - Page</title>
-    <style>
-        /* Tab Styles */
-        .tabs {
-            margin: 20px 0;
-            display: flex;
-            border-bottom: 1px solid #ddd;
+<script>
+    async function fetchImageFiles() {
+        const response = await fetch('/path/to/your/image/list/api'); // Update with your API endpoint
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+        return await response.json();
+    }
+
+    function createImageCard(data) {
+        const card = document.createElement('div');
+        card.className = 'image-card';
+
+        const meta = document.createElement('div');
+        meta.className = 'meta-data';
         
-        .tab-button {
-            padding: 12px 24px;
-            cursor: pointer;
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            margin-right: 5px;
-            transition: background 0.3s;
-        }
+        const title = document.createElement('div');
+        title.className = 'satellite-title';
+        title.textContent = `${data.satellite} ${data.type}`;
+
+        const details = document.createElement('p');
+        details.innerHTML = `
+            <strong>Date:</strong> ${data.date}<br>
+            <strong>Time:</strong> ${data.time}<br>
+            <strong>Frequency:</strong> ${data.frequency}
+        `;
+
+        const img = document.createElement('img');
+        img.src = `NM_photos/${data.filename}`;
+        img.alt = `${data.satellite} capture at ${data.time}`;
+
+        meta.appendChild(title);
+        meta.appendChild(details);
+        card.appendChild(meta);
+        card.appendChild(img);
         
-        .tab-button.active {
-            background: white;
-            font-weight: bold;
-            border-color: #2c3e50;
-        }
+        return card;
+    }
 
-        .tab-content {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-top: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Existing Image Styles */
-        .image-card {
-            margin: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #f9f9f9;
-        }
-        .meta-data {
-            margin-bottom: 10px;
-            color: #333;
-        }
-        img {
-            max-width: 20%;
-            height: auto;
-            border: 1px solid #ccc;
-        }
-        .satellite-title {
-            color: #2c3e50;
-            font-size: 1.2em;
-            margin-bottom: 5px;
-        }
-        /*
-        .image-note {
-            color: #666;
-            font-style: italic;
-        }
-        */
-    </style>
-</head>
-<body>
-    <!-- Tab Navigation -->
-    <div class="tabs">
-        <button class="tab-button active" onclick="switchTab('blog')">Main</button>
-        <button class="tab-button" onclick="switchTab('satellite')">Satellite Images</button>
-    </div>
-
-    <!-- Blog Content -->
-    <div id="blog-content" class="tab-content active">
-        <h2>Welcome to my page (under construction still...)</h2>
-        <div>
-            <p>This site is temporary for now and bound to become the main site. Below you can see the currently main site for
-                now which contains more stuff.
-            </p>
-            <p>Current running page (for more content):
-                <br><a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a>
-            </p>
-            <h3>Latest Update (currently updating)</h3>
-            <p>The next tab contains the images coming from my Raspberry Pi 5 using a RTL-SDR v4 to get images from NOAA and METEOR satellites.</p>
-
-            <p>GitHub:
-                <br><a href="https://github.com/jimgreekgamerYT/page/">https://github.com/jimgreekgamerYT/page</a>
-            </p>
-        </div>
-    </div>
-
-    <!-- Satellite Images Content -->
-    <div id="satellite-content" class="tab-content">
-        <h2>Satellite Images Gallery</h2>
-        <div id="image-container"></div>
-    </div>
-
-    <script> 
-        // Tab Switching Function
-        function switchTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            
-            // Show selected tab content and activate button
-            document.getElementById(`${tabName}-content`).classList.add('active');
-            document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
-        }
-
-        // Image Gallery Code (same as original)
-        const imageFiles = [
-            {
-                filename: "2025-03-06_12-55_meteor_m2-x_lrpt_137.9 MHz/msu_mr_rgb_AVHRR_221_False_Color_corrected.png",
-                satellite: "METEOR-M2",
-                type: "LRPT",
-                frequency: "137.91 MHz",
-                date: "2025-3-6",
-                time: "12:55 UTC",
-                //note: "Channel 4 Equalized (MSU-MR)"
-            },
-            {
-                filename: "2024-12-20_17-12_noaa_apt_137.62 MHz/raw_sync.png",
-                satellite: "NOAA-15",
-                type: "APT",
-                frequency: "137.62 MHz",
-                date: "2024-12-20",
-                time: "17:12 UTC",
-                //note: "Raw Synchronized Image"
-            }
-        ];
-
-        function createImageCard(data) {
-            const card = document.createElement('div');
-            card.className = 'image-card';
-
-            const meta = document.createElement('div');
-            meta.className = 'meta-data';
-            
-            const title = document.createElement('div');
-            title.className = 'satellite-title';
-            title.textContent = `${data.satellite} ${data.type}`;
-
-            const details = document.createElement('p');
-            details.innerHTML = `
-                <strong>Date:</strong> ${data.date}<br>
-                <strong>Time:</strong> ${data.time}<br>
-                <strong>Frequency:</strong> ${data.frequency}
-            `;
-
-            // Note has been removed for now (atleast)
-            //const note = document.createElement('p');
-            //note.className = 'image-note';
-            //note.textContent = data.note;
-
-            const img = document.createElement('img');
-            img.src = `NM_photos/${data.filename}`;
-            img.alt = `${data.satellite} capture at ${data.time}`;
-
-            const img1 = document.createElement('img');
-            img1.src = `NM_photos/${data.filename}`;
-            img1.alt = `${data.satellite} capture at ${data.time}`;
-
-            meta.appendChild(title);
-            meta.appendChild(details);
-            //meta.appendChild(note);
-            card.appendChild(meta);
-            card.appendChild(img);
-            
-            return card;
-        }
-
-        function loadGallery() {
+    async function loadGallery() {
+        try {
+            const imageFiles = await fetchImageFiles();
             const container = document.getElementById('image-container');
             
             const images = imageFiles.sort((a, b) => {
@@ -194,9 +51,10 @@
             images.forEach(data => {
                 container.appendChild(createImageCard(data));
             });
+        } catch (error) {
+            console.error('Failed to load images:', error);
         }
+    }
 
-        window.addEventListener('load', loadGallery);
-    </script>
-</body>
-</html>
+    window.addEventListener('load', loadGallery);
+</script>
