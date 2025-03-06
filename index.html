@@ -103,64 +103,82 @@
     </div>
 
     <script>
-    async function fetchImageFiles() {
-        const response = await fetch('/path/to/your/image/list/api'); // Update with your API endpoint
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    }
-
-    function createImageCard(data) {
-        const card = document.createElement('div');
-        card.className = 'image-card';
-
-        const meta = document.createElement('div');
-        meta.className = 'meta-data';
-        
-        const title = document.createElement('div');
-        title.className = 'satellite-title';
-        title.textContent = `${data.satellite} ${data.type}`;
-
-        const details = document.createElement('p');
-        details.innerHTML = `
-            <strong>Date:</strong> ${data.date}<br>
-            <strong>Time:</strong> ${data.time}<br>
-            <strong>Frequency:</strong> ${data.frequency}
-        `;
-
-        const img = document.createElement('img');
-        img.src = `NM_photos/${data.filename}`;
-        img.alt = `${data.satellite} capture at ${data.time}`;
-
-        meta.appendChild(title);
-        meta.appendChild(details);
-        card.appendChild(meta);
-        card.appendChild(img);
-        
-        return card;
-    }
-
-    async function loadGallery() {
-        try {
-            const imageFiles = await fetchImageFiles();
-            const container = document.getElementById('image-container');
+        // Tab Switching Function
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
             
-            const images = imageFiles.sort((a, b) => {
-                const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
-                const dateB = new Date(`${b.date}T${b.time.replace(' UTC', '')}`);
-                return dateB - dateA;
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
             });
-
-            images.forEach(data => {
-                container.appendChild(createImageCard(data));
-            });
-        } catch (error) {
-            console.error('Failed to load images:', error);
+            
+            // Show selected tab content and activate button
+            document.getElementById(`${tabName}-content`).classList.add('active');
+            document.querySelector(`.tab-button[onclick="switchTab('${tabName}')"]`).classList.add('active');
         }
-    }
 
-    window.addEventListener('load', loadGallery);
-</script>
+        // Image Gallery Code (same as original)
+        async function fetchImageFiles() {
+            const response = await fetch('/path/to/your/image/list/api'); // Update with your API endpoint
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.json();
+        }
+
+        function createImageCard(data) {
+            const card = document.createElement('div');
+            card.className = 'image-card';
+
+            const meta = document.createElement('div');
+            meta.className = 'meta-data';
+            
+            const title = document.createElement('div');
+            title.className = 'satellite-title';
+            title.textContent = `${data.satellite} ${data.type}`;
+
+            const details = document.createElement('p');
+            details.innerHTML = `
+                <strong>Date:</strong> ${data.date}<br>
+                <strong>Time:</strong> ${data.time}<br>
+                <strong>Frequency:</strong> ${data.frequency}
+            `;
+
+            const img = document.createElement('img');
+            img.src = `NM_photos/${data.filename}`;
+            img.alt = `${data.satellite} capture at ${data.time}`;
+
+            meta.appendChild(title);
+            meta.appendChild(details);
+            card.appendChild(meta);
+            card.appendChild(img);
+            
+            return card;
+        }
+
+        async function loadGallery() {
+            try {
+                const imageFiles = await fetchImageFiles();
+                const container = document.getElementById('image-container');
+                
+                const images = imageFiles.sort((a, b) => {
+                    const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
+                    const dateB = new Date(`${b.date}T${b.time.replace(' UTC', '')}`);
+                    return dateB - dateA;
+                });
+
+                images.forEach(data => {
+                    container.appendChild(createImageCard(data));
+                });
+            } catch (error) {
+                console.error('Failed to load images:', error);
+            }
+        }
+
+        window.addEventListener('load', loadGallery);
+    </script>
 </body>
 </html>
