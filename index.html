@@ -75,6 +75,7 @@
     <div class="tabs">
         <button class="tab-button active" onclick="switchTab('blog')">Main</button>
         <button class="tab-button" onclick="switchTab('satellite')">Satellite Images</button>
+        <button class="tab-button active" onclick="switchTab('blog')">Amateur Radio</button>
     </div>
 
     <!-- Blog Content -->
@@ -201,5 +202,11 @@
 
         window.addEventListener('load', loadGallery);
     </script>
+
+    <!-- Amateur Radio tab -->
+    <div id="satellite-content" class="tab-content">
+        <h2>Amateur Radio</h2>
+        <div id="image-container"></div>
+    </div>
 </body>
 </html>
