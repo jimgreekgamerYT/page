@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT - Dark Theme</title>
+    <title>jimgreekgamerYT</title>
     <style>
         * {
             margin: 0;
@@ -169,6 +169,40 @@
             margin: 20px 0;
             border-left: 4px solid #00bfff;
         }
+
+        /* Clickable Tab Buttons */
+        .welcome-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .tab-button {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            border: 2px solid #00bfff;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tab-button:hover {
+            background: linear-gradient(135deg, #00bfff 0%, #0099cc 100%);
+            color: #000000;
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4);
+        }
+
+        .tab-button-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -187,24 +221,31 @@
     <div id="main-content">
         <!-- Welcome Tab -->
         <div id="welcome" class="tab-content active">
-            <h1>👋 Welcome to My Site</h1>
+            <h1>Welcome to My Site</h1>
             <div class="welcome-box">
                 <h3>About This Site</h3>
                 <p>This site is still under development and will likely continue to grow with new content and projects. I'm working on expanding its features and adding more interesting projects.</p>
             </div>
 
             <div class="welcome-box">
-                <h3>🛰️ Latest Update</h3>
-                <p>The Satellite Images section contains the latest captures from my Raspberry Pi 5 using an RTL-SDR v4 to receive images from NOAA and METEOR satellites. Check out the gallery to see the latest satellite photos!</p>
+                <h3>Latest Update</h3>
+                <p>The Satellite Images section contains the latest captures from my Raspberry Pi 5 using an RTL-SDR v4 to receive images from NOAA and METEOR satellites.</p>
+            </div>
+
+            <h3>Explore My Content</h3>
+            <div class="welcome-tabs">
+                <button class="tab-button" onclick="showTab('satellite')">
+                    <span class="tab-button-icon">🛰️</span>
+                    Satellite Images
+                </button>
+                <button class="tab-button" onclick="showTab('amateur')">
+                    <span class="tab-button-icon">📻</span>
+                    Amateur Radio
+                </button>
             </div>
 
             <div class="welcome-box">
-                <h3>📻 Coming Soon</h3>
-                <p>More content is on the way! Stay tuned for updates about amateur radio projects and other exciting additions.</p>
-            </div>
-
-            <div class="welcome-box">
-                <h3>🔗 Connect</h3>
+                <h3>Connect</h3>
                 <p>You can find more information about my projects on:</p>
                 <p><a href="https://github.com/jimgreekgamerYT/page/" target="_blank">GitHub Repository</a></p>
             </div>
@@ -212,7 +253,7 @@
 
         <!-- Satellite Images Tab -->
         <div id="satellite" class="tab-content">
-            <h1>🛰️ Satellite Images Gallery</h1>
+            <h1>Satellite Images Gallery</h1>
             <h3>Important Announcement</h3>
             <p>Due to unfortunate events and the NOAA satellites being shut down, this project has reached its final results. The pictures won't be updated moving forward, but you can see the latest captures below.</p>
             <div id="image-container"></div>
@@ -220,7 +261,7 @@
 
         <!-- Amateur Radio Tab -->
         <div id="amateur" class="tab-content">
-            <h1>📻 Amateur Radio</h1>
+            <h1>Amateur Radio</h1>
             <p>Coming soon! Information about amateur radio activities will be added here.</p>
         </div>
     </div>
