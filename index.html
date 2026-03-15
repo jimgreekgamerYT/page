@@ -133,6 +133,16 @@
             margin-bottom: 10px;
         }
 
+        a {
+            color: #00bfff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #ffffff;
+        }
+
         /* Close button for sidebar */
         .sidebar .close-btn {
             position: absolute;
@@ -149,6 +159,16 @@
         .sidebar .close-btn:hover {
             color: #00bfff;
         }
+
+        /* Welcome Section Styles */
+        .welcome-box {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #00bfff;
+        }
     </style>
 </head>
 <body>
@@ -158,14 +178,40 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar-menu">
         <button class="close-btn" onclick="toggleMenu()">✕</button>
+        <a href="#" onclick="showTab('welcome')">Welcome</a>
         <a href="#" onclick="showTab('satellite')">Satellite Images</a>
         <a href="#" onclick="showTab('amateur')">Amateur Radio</a>
     </div>
 
     <!-- Main Content -->
     <div id="main-content">
+        <!-- Welcome Tab -->
+        <div id="welcome" class="tab-content active">
+            <h1>👋 Welcome to My Site</h1>
+            <div class="welcome-box">
+                <h3>About This Site</h3>
+                <p>This site is still under development and will likely continue to grow with new content and projects. I'm working on expanding its features and adding more interesting projects.</p>
+            </div>
+
+            <div class="welcome-box">
+                <h3>🛰️ Latest Update</h3>
+                <p>The Satellite Images section contains the latest captures from my Raspberry Pi 5 using an RTL-SDR v4 to receive images from NOAA and METEOR satellites. Check out the gallery to see the latest satellite photos!</p>
+            </div>
+
+            <div class="welcome-box">
+                <h3>📻 Coming Soon</h3>
+                <p>More content is on the way! Stay tuned for updates about amateur radio projects and other exciting additions.</p>
+            </div>
+
+            <div class="welcome-box">
+                <h3>🔗 Connect</h3>
+                <p>You can find more information about my projects on:</p>
+                <p><a href="https://github.com/jimgreekgamerYT/page/" target="_blank">GitHub Repository</a></p>
+            </div>
+        </div>
+
         <!-- Satellite Images Tab -->
-        <div id="satellite" class="tab-content active">
+        <div id="satellite" class="tab-content">
             <h1>🛰️ Satellite Images Gallery</h1>
             <h3>Important Announcement</h3>
             <p>Due to unfortunate events and the NOAA satellites being shut down, this project has reached its final results. The pictures won't be updated moving forward, but you can see the latest captures below.</p>
