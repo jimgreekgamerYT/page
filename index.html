@@ -3,130 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jimgreekgamerYT - Page</title>
+    <title>jimgreekgamerYT - Dark Theme</title>
     <style>
-        /* Tab Styles */
-        .tabs {
-            margin: 20px 0;
-            display: flex;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .tab-button {
-            padding: 12px 24px;
-            cursor: pointer;
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            margin-right: 5px;
-            transition: background 0.3s;
-        }
-        
-        .tab-button.active {
-            background: white;
-            font-weight: bold;
-            border-color: #2c3e50;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        /* Hamburger Menu Button */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+
+        .menu-btn:hover {
+            background-color: #2a2a2a;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #1e1e1e;
+            transition: left 0.3s ease;
+            padding-top: 80px;
+            border-right: 1px solid #333;
+            z-index: 999;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #ffffff;
+            display: block;
+            transition: background 0.3s, padding-left 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: #2a2a2a;
+            border-left-color: #00bfff;
+            padding-left: 25px;
+        }
+
+        /* Main Content */
+        #main-content {
+            padding: 40px;
+            transition: margin-left 0.3s;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Tab Content */
         .tab-content {
             display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-top: none;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Existing Image Styles */
+        /* Image Card Styles */
         .image-card {
-            margin: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
             border-radius: 8px;
-            background: #f9f9f9;
+            background: #1e1e1e;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
+        }
+
         .meta-data {
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 15px;
+            color: #b0b0b0;
         }
-        img {
-            max-width: 20%;
-            height: auto;
-            border: 1px solid #ccc;
-        }
+
         .satellite-title {
-            color: #2c3e50;
-            font-size: 1.2em;
-            margin-bottom: 5px;
+            color: #00bfff;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
-        /*
-        .image-note {
-            color: #666;
-            font-style: italic;
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-top: 10px;
         }
-        */
+
+        h1, h2, h3 {
+            color: #00bfff;
+            margin-bottom: 15px;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        /* Close button for sidebar */
+        .sidebar .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #ffffff;
+            background: none;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .sidebar .close-btn:hover {
+            color: #00bfff;
+        }
     </style>
 </head>
 <body>
-    <!-- Tab Navigation -->
-    <div class="tabs">
-        <button class="tab-button active" onclick="switchTab('blog')">Main</button>
-        <button class="tab-button" onclick="switchTab('satellite')">Satellite Images</button>
-        <!-- <button class="tab-button" onclick="switchTab('hamradio')">Amateur Radio</button> -->
+    <!-- Hamburger Menu Button -->
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar-menu">
+        <button class="close-btn" onclick="toggleMenu()">✕</button>
+        <a href="#" onclick="showTab('satellite')">Satellite Images</a>
+        <a href="#" onclick="showTab('amateur')">Amateur Radio</a>
     </div>
 
-    <!-- Blog Content -->
-    <div id="blog-content" class="tab-content active">
-        <h2>Welcome</h2>
-        <div>
-            <p>This site is still under development (and probably will be for quite a bif of time) for adding more stuff and projects.<!-- Below you can see the currently main site for
-                now which contains more stuff.-->
-            </p>
-            <!--
-            <p>Current running page (for more content):
-                <br><a href="https://jimgreekgameryt.jimdofree.com/">https://jimgreekgameryt.jimdofree.com/</a>
-            </p>
-            -->
-            <h3>Latest Update (currently updating)</h3>
-            <p>The next tab contains the images coming from my Raspberry Pi 5 using a RTL-SDR v4 to get images from NOAA and METEOR satellites.</p>
-            <!--
-            <p>GitHub:
-                <br><a href="https://github.com/jimgreekgamerYT/page/">https://github.com/jimgreekgamerYT/page</a>
-            </p>
-            -->
+    <!-- Main Content -->
+    <div id="main-content">
+        <!-- Satellite Images Tab -->
+        <div id="satellite" class="tab-content active">
+            <h1>🛰️ Satellite Images Gallery</h1>
+            <h3>Important Announcement</h3>
+            <p>Due to unfortunate events and the NOAA satellites being shut down, this project has reached its final results. The pictures won't be updated moving forward, but you can see the latest captures below.</p>
+            <div id="image-container"></div>
+        </div>
+
+        <!-- Amateur Radio Tab -->
+        <div id="amateur" class="tab-content">
+            <h1>📻 Amateur Radio</h1>
+            <p>Coming soon! Information about amateur radio activities will be added here.</p>
         </div>
     </div>
 
-    <!-- Satellite Images Content -->
-    <div id="satellite-content" class="tab-content">
-        <h2>Satellite Images Gallery</h2>
-        <h3>Imprtant announcement!</h3>
-        <p>Due to unfortunate events and the NOAA satellites deing shut down this project has reached it's final results and thus the pictures aren't going to updated moving forward leaving the latests images taken by me.</p>
-        <div id="image-container"></div>
-    </div>
-
-    <script> 
-        // Tab Switching Function
-        function switchTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            
-            // Show selected tab content and activate button
-            document.getElementById(`${tabName}-content`).classList.add('active');
-            document.querySelector(`button[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    <script>
+        // Toggle Sidebar
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar-menu');
+            sidebar.classList.toggle('active');
         }
 
-        // Image Gallery Code (same as original)
+        // Close sidebar when clicking on a link
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Close sidebar
+            document.getElementById('sidebar-menu').classList.remove('active');
+        }
+
+        // Image Gallery Data
         const imageFiles = [
             {
                 filename: "msu_mr_rgb_MSA_corrected.png",
@@ -134,8 +208,7 @@
                 type: "LRPT",
                 frequency: "137.91 MHz",
                 date: "17-03-2025",
-                time: "12:18 UTC",
-                //note: "Channel 4 Equalized (MSU-MR)"
+                time: "12:18 UTC"
             },
             {
                 filename: "raw_sync.png",
@@ -143,8 +216,7 @@
                 type: "APT",
                 frequency: "137.1 MHz",
                 date: "17-03-2025",
-                time: "09:56 UTC",
-                //note: "Raw Synchronized Image"
+                time: "09:56 UTC"
             }
         ];
 
@@ -152,71 +224,44 @@
             const card = document.createElement('div');
             card.className = 'image-card';
 
-            const meta = document.createElement('div');
-            meta.className = 'meta-data';
-            
             const title = document.createElement('div');
             title.className = 'satellite-title';
-            title.textContent = `${data.satellite} ${data.type}`;
+            title.textContent = `${data.satellite} - ${data.type}`;
 
-            const details = document.createElement('p');
-            details.innerHTML = `
+            const meta = document.createElement('div');
+            meta.className = 'meta-data';
+            meta.innerHTML = `
                 <strong>Date:</strong> ${data.date}<br>
                 <strong>Time:</strong> ${data.time}<br>
                 <strong>Frequency:</strong> ${data.frequency}
             `;
 
-            // Note has been removed for now (atleast)
-            //const note = document.createElement('p');
-            //note.className = 'image-note';
-            //note.textContent = data.note;
-
             const img = document.createElement('img');
             img.src = `NM_photos/${data.filename}`;
             img.alt = `${data.satellite} capture at ${data.time}`;
 
-            //const img1 = document.createElement('img');
-            //img1.src = `NM_photos/${data.filename}`;
-            //img1.alt = `${data.satellite} capture at ${data.time}`;
-
-            meta.appendChild(title);
-            meta.appendChild(details);
-            //meta.appendChild(note);
+            card.appendChild(title);
             card.appendChild(meta);
             card.appendChild(img);
-            
+
             return card;
         }
 
         function loadGallery() {
             const container = document.getElementById('image-container');
-            
-            const images = imageFiles.sort((a, b) => {
+
+            const sortedImages = imageFiles.sort((a, b) => {
                 const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
                 const dateB = new Date(`${b.date}T${b.time.replace(' UTC', '')}`);
                 return dateB - dateA;
             });
 
-            images.forEach(data => {
+            sortedImages.forEach(data => {
                 container.appendChild(createImageCard(data));
             });
         }
 
         window.addEventListener('load', loadGallery);
     </script>
-
-    
-    <!-- Amateur Radio tab -->
-    <!--
-    <div id="hamradio" class="tab-content">
-        <h2>Welcome</h2>
-        <div>
-            <p>
-                test
-            </p>
-        </div>
-    </div>
-    -->
-    
 </body>
 </html>
