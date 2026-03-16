@@ -49,6 +49,7 @@
             padding-top: 80px;
             border-right: 1px solid #333;
             z-index: 999;
+            overflow-y: auto;
         }
 
         .sidebar.active {
@@ -71,6 +72,15 @@
             padding-left: 25px;
         }
 
+        .sidebar-section-title {
+            padding: 15px 20px 10px 20px;
+            font-size: 12px;
+            color: #00bfff;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
         /* Main Content */
         #main-content {
             padding: 40px;
@@ -85,6 +95,45 @@
         }
 
         .tab-content.active {
+            display: block;
+        }
+
+        /* Subtabs Navigation */
+        .subtabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .subtab-btn {
+            background-color: #1e1e1e;
+            border: 2px solid #00bfff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .subtab-btn.active {
+            background-color: #00bfff;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .subtab-btn:hover {
+            background-color: #00bfff;
+            color: #000000;
+        }
+
+        .subtab-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .subtab-content.active {
             display: block;
         }
 
@@ -203,6 +252,16 @@
             display: block;
             margin-bottom: 10px;
         }
+
+        /* Project Content Box */
+        .project-box {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #00bfff;
+        }
     </style>
 </head>
 <body>
@@ -214,6 +273,7 @@
         <button class="close-btn" onclick="toggleMenu()">✕</button>
         <a href="#" onclick="showTab('welcome')">Welcome</a>
         <a href="#" onclick="showTab('satellite')">Satellite Images</a>
+        <a href="#" onclick="showTab('projects')">Projects</a>
     </div>
 
     <!-- Main Content -->
@@ -237,6 +297,10 @@
                     <span class="tab-button-icon">🛰️</span>
                     Satellite Images
                 </button>
+                <button class="tab-button" onclick="showTab('projects')">
+                    <span class="tab-button-icon">🔧</span>
+                    Projects
+                </button>
             </div>
 
             <div class="welcome-box">
@@ -252,6 +316,64 @@
             <h3>Important Announcement</h3>
             <p>Due to unfortunate events and the NOAA satellites being shut down, this project has reached its final results. The pictures won't be updated moving forward, but you can see the latest captures below.</p>
             <div id="image-container"></div>
+        </div>
+
+        <!-- Projects Tab -->
+        <div id="projects" class="tab-content">
+            <h1>Projects</h1>
+            
+            <div class="subtabs">
+                <button class="subtab-btn active" onclick="showSubtab('satellite-project', this)">Satellite</button>
+                <button class="subtab-btn" onclick="showSubtab('baofeng', this)">Baofeng Battery Eliminator</button>
+            </div>
+
+            <!-- Satellite Project Subtab -->
+            <div id="satellite-project" class="subtab-content active">
+                <h2>Satellite Imagery Project</h2>
+                <div class="project-box">
+                    <h3>Overview</h3>
+                    <p>A project to receive and process satellite imagery from NOAA and METEOR satellites using a Raspberry Pi 5 and RTL-SDR v4 receiver.</p>
+                </div>
+
+                <div class="project-box">
+                    <h3>Equipment Used</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Raspberry Pi 5</li>
+                        <li>RTL-SDR v4 Software Defined Radio</li>
+                        <li>Antenna System</li>
+                        <li>NOAA & METEOR Satellites</li>
+                    </ul>
+                </div>
+
+                <div class="project-box">
+                    <h3>Status</h3>
+                    <p>Project has reached its final stage. NOAA satellites have been shut down, but archived images are available in the Satellite Images section.</p>
+                </div>
+            </div>
+
+            <!-- Baofeng Battery Eliminator Subtab -->
+            <div id="baofeng" class="subtab-content">
+                <h2>Baofeng Battery Eliminator</h2>
+                <div class="project-box">
+                    <h3>Overview</h3>
+                    <p>A custom-built battery eliminator for Baofeng radios, allowing them to be powered from external DC sources instead of disposable batteries.</p>
+                </div>
+
+                <div class="project-box">
+                    <h3>Features</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>DC power connector compatibility</li>
+                        <li>Voltage regulation</li>
+                        <li>Protection circuitry</li>
+                        <li>Easy installation</li>
+                    </ul>
+                </div>
+
+                <div class="project-box">
+                    <h3>Status</h3>
+                    <p>Project under development. Check back soon for more details and build documentation.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -274,6 +396,25 @@
 
             // Close sidebar
             document.getElementById('sidebar-menu').classList.remove('active');
+        }
+
+        // Show Subtab
+        function showSubtab(subtabName, button) {
+            // Hide all subtabs
+            document.querySelectorAll('.subtab-content').forEach(subtab => {
+                subtab.classList.remove('active');
+            });
+
+            // Remove active class from all subtab buttons
+            document.querySelectorAll('.subtab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected subtab
+            document.getElementById(subtabName).classList.add('active');
+
+            // Add active class to clicked button
+            button.classList.add('active');
         }
 
         // Image Gallery Data
