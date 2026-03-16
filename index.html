@@ -262,6 +262,14 @@
             margin: 20px 0;
             border-left: 4px solid #00bfff;
         }
+
+        ul {
+            margin: 10px 0;
+        }
+
+        li {
+            margin: 8px 0;
+        }
     </style>
 </head>
 <body>
@@ -347,8 +355,11 @@
 
                 <div class="project-box">
                     <h3>Status</h3>
-                    <p>Project has reached its final stage. NOAA satellites have been shut down, but archived images are available in the Satellite Images section.</p>
+                    <p>Project has reached its final stage. NOAA satellites have been shut down, but archived images are available below.</p>
                 </div>
+
+                <h3>Captured Images</h3>
+                <div id="satellite-project-images"></div>
             </div>
 
             <!-- Baofeng Battery Eliminator Subtab -->
@@ -465,7 +476,11 @@
         }
 
         function loadGallery() {
+            // Load images in main satellite tab
             const container = document.getElementById('image-container');
+            
+            // Load images in projects satellite subtab
+            const projectContainer = document.getElementById('satellite-project-images');
 
             const sortedImages = imageFiles.sort((a, b) => {
                 const dateA = new Date(`${a.date}T${a.time.replace(' UTC', '')}`);
@@ -475,6 +490,7 @@
 
             sortedImages.forEach(data => {
                 container.appendChild(createImageCard(data));
+                projectContainer.appendChild(createImageCard(data));
             });
         }
 
