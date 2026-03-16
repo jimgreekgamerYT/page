@@ -280,7 +280,6 @@
     <div class="sidebar" id="sidebar-menu">
         <button class="close-btn" onclick="toggleMenu()">✕</button>
         <a href="#" onclick="showTab('welcome')">Welcome</a>
-        <a href="#" onclick="showTab('satellite')">Satellite Images</a>
         <a href="#" onclick="showTab('projects')">Projects</a>
     </div>
 
@@ -296,15 +295,11 @@
 
             <div class="welcome-box">
                 <h3>Latest Update</h3>
-                <p>The Satellite Images section contains the latest captures from my Raspberry Pi 5 using an RTL-SDR v4 to receive images from NOAA and METEOR satellites.</p>
+                <p>The Projects section contains detailed information about my latest endeavors, including satellite imagery and custom radio projects.</p>
             </div>
 
             <h3>Explore My Content</h3>
             <div class="welcome-tabs">
-                <button class="tab-button" onclick="showTab('satellite')">
-                    <span class="tab-button-icon">🛰️</span>
-                    Satellite Images
-                </button>
                 <button class="tab-button" onclick="showTab('projects')">
                     <span class="tab-button-icon">🔧</span>
                     Projects
@@ -316,14 +311,6 @@
                 <p>You can find more information about my projects on:</p>
                 <p><a href="https://github.com/jimgreekgamerYT/page/" target="_blank">GitHub Repository</a></p>
             </div>
-        </div>
-
-        <!-- Satellite Images Tab -->
-        <div id="satellite" class="tab-content">
-            <h1>Satellite Images Gallery</h1>
-            <h3>Important Announcement</h3>
-            <p>Due to unfortunate events and the NOAA satellites being shut down, this project has reached its final results. The pictures won't be updated moving forward, but you can see the latest captures below.</p>
-            <div id="image-container"></div>
         </div>
 
         <!-- Projects Tab -->
@@ -354,8 +341,8 @@
                 </div>
 
                 <div class="project-box">
-                    <h3>Status</h3>
-                    <p>Project has reached its final stage. NOAA satellites have been shut down, but archived images are available below.</p>
+                    <h3>Important Announcement</h3>
+                    <p>Due to unfortunate events and the NOAA satellites being shut down, this project has reached its final results. The pictures won't be updated moving forward, but the latest captures are displayed below.</p>
                 </div>
 
                 <h3>Captured Images</h3>
@@ -476,10 +463,6 @@
         }
 
         function loadGallery() {
-            // Load images in main satellite tab
-            const container = document.getElementById('image-container');
-            
-            // Load images in projects satellite subtab
             const projectContainer = document.getElementById('satellite-project-images');
 
             const sortedImages = imageFiles.sort((a, b) => {
@@ -489,7 +472,6 @@
             });
 
             sortedImages.forEach(data => {
-                container.appendChild(createImageCard(data));
                 projectContainer.appendChild(createImageCard(data));
             });
         }
